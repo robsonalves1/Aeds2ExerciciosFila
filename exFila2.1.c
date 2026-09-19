@@ -2,10 +2,9 @@
 #include <stdlib.h>
 #define MAX 10
 
-//1.5 — Imprimir sem destruir
-//Implemente void imprime(struct fila *f); que imprime os elementos do início até o fim, sem
-//alterar a fila ao final. Cuidado: como o arranjo é circular, o ultimo pode estar "antes" do primeiro no
-//vetor.
+//2.1 — Copiar uma fila
+//Implemente struct fila *copia(struct fila *f); que devolve uma nova fila com os mesmos
+//elementos, na mesma ordem, sem modificar a original
 
 typedef struct {
     int elementos[MAX];
@@ -69,36 +68,30 @@ int tamanho(FILA *f) {
 void destroi(FILA *f) {
     free(f);
 }
- 
-void imprime(FILA *f) {
-    FILA *fAux = cria();
-    int numAux = 0;
 
-    while (tamanho(f) > 0) {
-        numAux = desenfilera(f);
-        printf("%d\n", numAux);
-        enfilera(fAux, numAux);
+FILA *copia(FILA *f) {
+    FILA *fAux;
+    fAux = malloc(sizeof(FILA));
+
+    if (!fAux) {
+        perror(NULL);
+        exit(1);
     }
 
-    while (tamanho(fAux) > 0) {
-        numAux = desenfilera(fAux);
-        enfilera(f, numAux);
+    fAux->primeiro = f->primeiro;
+    fAux->ultimo = f->ultimo;
+
+    int i = fAux->primeiro;
+    
+    while (i != fAux->ultimo) {
+        fAux->elementos[i] = f->elementos[i];
+        i = (i+1) % MAX;
     }
 
-    destroi(fAux);
+    return fAux;
 }
 
 int main() {
-    FILA *f = cria();
-
-    printf("Pilha criada.\n\n");
-
-    enfilera(f, 3);
-    enfilera(f, 7);
-    enfilera(f, 1);
-    enfilera(f, 9);
-
-    destroi(f);
 
     return 1;
 }
