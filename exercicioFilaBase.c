@@ -52,11 +52,7 @@ int desenfilera(FILA *f) {
 }
 
 int tamanho(FILA *f) {
-    int res = f->ultimo - f->primeiro;
-
-    if (res < 0) {
-        res = res * (-1);
-    }
+    int res = (f->ultimo - f->primeiro + MAX) % MAX;
 
     return res;
 }
