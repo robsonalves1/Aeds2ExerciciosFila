@@ -6,6 +6,7 @@ typedef struct {
     int elementos[MAX];
     int primeiro;
     int ultimo;
+    int total;
 } FILA;
 
 FILA *cria() {
@@ -19,10 +20,19 @@ FILA *cria() {
 
     f->primeiro = 0;
     f->ultimo = 0;
+    f->total = 0;
+}
+
+int estaCheia(FILA *f) {
+    return f->total == MAX;
+}
+
+int estaVazia(FILA *f) {
+    return f->total == 0;
 }
 
 void enfilera(FILA *f, int elem) {
-    if ((f->ultimo + 1) % MAX == f->primeiro) {
+    if (estaCheia(f)) {
         printf("Fila cheia\n");
         exit(1);
     } 
@@ -33,10 +43,12 @@ void enfilera(FILA *f, int elem) {
     if (f->ultimo == MAX) {
         f->ultimo = 0;
     }
+
+    f->total++;
 }
 
 int desenfilera(FILA *f) {
-    if (f->primeiro == f-> ultimo) {
+    if (estaVazia(f)) {
         printf("Fila vazia\n");
         exit(1);
     }
@@ -48,11 +60,7 @@ int desenfilera(FILA *f) {
         f->primeiro = 0;
     }
 
-    return res;
-}
-
-int tamanho(FILA *f) {
-    int res = (f->ultimo - f->primeiro + MAX) % MAX;
+    f->total--;
 
     return res;
 }
@@ -63,6 +71,14 @@ void destroi(FILA *f) {
  
 
 int main() {
+    FILA *f = cria();
 
-    return 1;
+    for (int i = 1; i <= 5; i++)
+        enfilera(f, i * 10);
+
+    while (!estaVazia(f))
+        printf("%d\n", desenfilera(f));
+
+    destroi(f);
+    return 0;
 }
